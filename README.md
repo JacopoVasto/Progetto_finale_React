@@ -1,1 +1,0 @@
-mi sono fermato a 3xLoad data category

@@ -6,9 +6,9 @@ export default function LazyLoadGameImage({ image }) {
         <LazyLoadImage
         alt="game image"
         effect="blur"
-        wrappedProps={{
+        wrapperProps={{
             style: {transitionDelay: "0.5s"},
         }}
         src={image} />
-    )
+    );
 }

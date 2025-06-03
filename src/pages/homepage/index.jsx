@@ -1,12 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { ApiContext } from "../../contexts/ApiContext";
 import CardGame from "../../components/CardGame"
 
 export default function HomePage() {
   const [data, setData] = useState(null);
   const [error, setError] = useState(null);
+  const { rawgApiKey } = useContext(ApiContext)
 
-  const apiKey = "4bb07bc50bfd464fb768ee30fd693670";
-  const initialUrl = `https://api.rawg.io/api/games?key=${apiKey}&dates=2024-01-01,2024-12-31&page=1`;
+  
+  const initialUrl = `https://api.rawg.io/api/games?key=${ rawgApiKey }&dates=2024-01-01,2024-12-31&page=1`;
 
   const load = async () => {
     try {
@@ -15,7 +17,6 @@ export default function HomePage() {
         throw new Error(response.statusText);
       }
       const json = await response.json();
-      console.log(json);
       setData(json);
     } catch (error) {
       setError(error.message);
