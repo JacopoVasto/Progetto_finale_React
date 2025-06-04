@@ -1,20 +1,30 @@
 import LazyLoadGameImage from '../components/LazyLoadGameImage'
+import { Link } from 'react-router';
 
 export default function CardGame({ game }) {
     
-    const genres = game.genres.map((genre) => genre.name).join(`, `);
+  const genres = game.genres.map((genre) => (
+    <Link
+      key={genre.id}
+      to={`/games/${genre.slug}`}
+      className="badge badge-outline genreBadge"
+    >
+      {genre.name}
+    </Link>
+  ));
+
 
     return(
-        <div className="card w-full sm:w-11/12 md:w-80 bg-base-100 shadow-sm">
+        <div className="card w-full sm:w-11/12 md:w-80 bg-base-100 shadow-sm cardSpecial">
   <figure>
     <LazyLoadGameImage image={game.background_image} />
   </figure>
   <div className="card-body">
     <h2 className="card-title">{game.name}</h2>
-    <small>{genres}</small>
+    <div className="flex flex-wrap gap-1">{genres}</div>
     <p>{game.released}</p>
     <div className="card-actions justify-end">
-      <button className="btn btn-primary">Visita il gioco</button>
+      <button className="btn w-full btnSpecial">Visita il gioco</button>
     </div>
   </div>
 </div>

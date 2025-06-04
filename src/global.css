@@ -1,2 +1,27 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+.cardSpecial {
+    transition: transform 0.3s ease;
+    
+}
+
+.cardSpecial:hover {
+    transform: scale(1.05);
+}
+
+.genreBadge {
+    background-color: rgba(128, 0, 128, 0.189);
+}
+
+.genreBadge:hover {
+    background-color: rgba(128, 0, 128);
+}
+
+.btnSpecial {
+    background-color: rgba(128, 0, 128, 0.189);
+}
+
+.btnSpecial:hover {
+    background-color: rgba(128, 0, 128);
+}
