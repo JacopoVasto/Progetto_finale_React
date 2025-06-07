@@ -24,7 +24,11 @@ export default function CardGame({ game }) {
     <div className="flex flex-wrap gap-1">{genres}</div>
     <p>{game.released}</p>
     <div className="card-actions justify-end">
-      <button className="btn w-full btnSpecial">Visita il gioco</button>
+      <Link to={`/games/${game.slug}/${game.id}`} className='w-full'>
+        <button className="btn w-full btnSpecial">
+          Visita il gioco
+        </button>
+      </Link>
     </div>
   </div>
 </div>
