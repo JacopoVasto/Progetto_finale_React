@@ -1,36 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { ApiContext } from "../../contexts/ApiContext";
 import CardGame from "../../components/CardGame"
+import useFetchSolution from "../../hook/useFetchSolution";
 
 export default function HomePage() {
-  const [data, setData] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false)
   const { rawgApiKey } = useContext(ApiContext)
 
-  
   const initialUrl = `https://api.rawg.io/api/games?key=${ rawgApiKey }&dates=2024-01-01,2024-12-31&page=1`;
 
-  const load = async () => {
-    setLoading(true)
-    try {
-      const response = await fetch(initialUrl);
-      if (!response.ok) {
-        throw new Error(response.statusText);
-      }
-      const json = await response.json();
-      setData(json);
-    } catch (error) {
-      setError(error.message);
-      setData(null);
-    } finally {
-      setLoading(false)
-    }
-  };
-
-  useEffect(() => {
-    load();
-  }, []);
+  const { data, loading, error, updateUrl } = useFetchSolution(initialUrl)
 
     return (
     <>

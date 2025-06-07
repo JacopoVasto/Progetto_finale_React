@@ -1,10 +1,4 @@
-finita US 4. controllare e sistemare grafica della pagina di dettaglio.  
-  
-pagine modificate:  
--routing  
--gamepage
--cardgame
+US5 terminata  
 
 
-rivedere anche homepage e genrepage:
-ho apportato modifiche alla struttura della pagina e inserito il loader
+Controllare e sistemare grafica della pagina di dettaglio.

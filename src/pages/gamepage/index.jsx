@@ -1,38 +1,16 @@
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { ApiContext } from '../../contexts/ApiContext';
 import { useParams } from "react-router";
+import useFetchSolution from "../../hook/useFetchSolution";
 
 export default function GamePage() {
     const { id } = useParams();
     const { rawgApiKey } = useContext(ApiContext);
 
-    const [data, setData] = useState(null);
-    const [error, setError] = useState(null);
-    const [loading, setLoading] = useState(false);
-
     const initialUrl = `https://api.rawg.io/api/games/${id}?key=${rawgApiKey}`
+    const { data, error, loading } = useFetchSolution(initialUrl)
 
-    const load = async () => {
-        setLoading(true);
 
-        try {
-            const response = await fetch(initialUrl);
-            if (!response.ok) {
-                throw new Error(response.statusText);
-            }
-            const json = await response.json()
-            setData(json);
-        } catch (error) {
-            setError(error.message);
-            setData(null);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    useEffect(()=> {
-        load();
-    }, [id]);
 
     return (
         <>
