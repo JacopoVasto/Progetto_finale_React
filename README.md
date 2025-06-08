@@ -1,3 +1,8 @@
+US7 terminata  
+piccolo refactoring su apiKey  
+  
+  
+  
 US6 Terminata  
 logica completamente funzionante 
   
