@@ -1,15 +1,15 @@
 
-import { useEffect, useContext } from "react";
+import { useEffect } from "react";
 import { useSearchParams } from "react-router";
 import CardGame from "../../components/CardGame";
 import useFetchSolution from "../../hook/useFetchSolution";
-import { ApiContext } from "../../contexts/ApiContext";
+import { rawgApiKey } from "../../api/apiKeys";
+
 
 export default function SearchPage() {
     
     let [searchParams] = useSearchParams();
     const game = searchParams.get("query");
-    const { rawgApiKey } = useContext(ApiContext);
 
     const initialUrl = `https://api.rawg.io/api/games?key=${ rawgApiKey }&search=${game}`;
 

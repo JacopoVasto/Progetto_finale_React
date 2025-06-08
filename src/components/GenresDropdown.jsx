@@ -1,10 +1,8 @@
-import { useEffect, useState, useContext } from 'react';
-import { ApiContext } from '../contexts/ApiContext';
+import { rawgApiKey } from '../api/apiKeys';
 import { Link } from 'react-router'
 import useFetchSolution from '../hook/useFetchSolution';
 
 export default function GenresDropdown() {
-    const { rawgApiKey } = useContext(ApiContext);
 
     const initialUrl = `https://api.rawg.io/api/genres?key=${rawgApiKey}`;
     const { data, error } = useFetchSolution(initialUrl);

@@ -1,11 +1,9 @@
-import { useContext, useEffect, useState } from "react";
-import { ApiContext } from "../../contexts/ApiContext";
+import { rawgApiKey } from "../../api/apiKeys";
 import CardGame from "../../components/CardGame"
 import useFetchSolution from "../../hook/useFetchSolution";
 
 export default function HomePage() {
-  const { rawgApiKey } = useContext(ApiContext)
-
+  
   const initialUrl = `https://api.rawg.io/api/games?key=${ rawgApiKey }&dates=2024-01-01,2024-12-31&page=1`;
 
   const { data, loading, error, updateUrl } = useFetchSolution(initialUrl)

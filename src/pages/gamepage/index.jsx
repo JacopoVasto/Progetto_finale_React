@@ -1,11 +1,9 @@
-import { useContext } from "react";
-import { ApiContext } from '../../contexts/ApiContext';
+import { rawgApiKey } from "../../api/apiKeys"
 import { useParams } from "react-router";
 import useFetchSolution from "../../hook/useFetchSolution";
 
 export default function GamePage() {
     const { id } = useParams();
-    const { rawgApiKey } = useContext(ApiContext);
 
     const initialUrl = `https://api.rawg.io/api/games/${id}?key=${rawgApiKey}`
     const { data, error, loading } = useFetchSolution(initialUrl)

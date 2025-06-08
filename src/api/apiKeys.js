@@ -1,0 +1,1 @@
+export const rawgApiKey = import.meta.env.VITE_RAWG_API_KEY;
