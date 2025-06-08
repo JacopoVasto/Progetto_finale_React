@@ -1,25 +1,9 @@
+import SearchButton from "./SearchButton";
+
 export default function Header() {
+
+
     return (
-        // <nav className="navbar bg-base-100 shadow-sm">
-        //     <ul>
-        //         <li><strong>Reaktor</strong></li>
-        //     </ul>
-        //     <ul>
-        //         <li>
-        //             <a href="#" className="secondary">Servuces</a>
-        //         </li>
-        //         <li>
-        //             <details className="dropdown">
-        //                 <summary>Account</summary>
-        //                 <ul dir="rtl">
-        //                     <li><a href="*">Profile</a></li>
-        //                     <li><a href="*">Setting</a></li>
-        //                     <li><a href="*">Logout</a></li>
-        //                 </ul>
-        //             </details>
-        //         </li>
-        //     </ul>
-        // </nav>
         <div className="navbar bg-base-100 shadow-sm">
             <div className="navbar-start">
                 <div className="dropdown">
@@ -29,9 +13,9 @@ export default function Header() {
                 <ul
                 tabIndex={0}
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                    <li><a>Homepage</a></li>
-                    <li><a>Profile</a></li>
-                    <li><a>LogOut</a></li>
+                    <li><a>ciao</a></li>
+                    <li><a>belli</a></li>
+                    <li><a>:*</a></li>
                 </ul>
             </div>
         </div>
@@ -39,9 +23,8 @@ export default function Header() {
                 <a className="btn btn-ghost text-xl">VAULT</a>
             </div>
         <div className="navbar-end">
-            <button className="btn btn-ghost btn-circle">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /> </svg>
-            </button>
+                {/* bottone di ricerca */}
+                <SearchButton />
             <button className="btn btn-ghost btn-circle">
                 <div className="indicator">
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">      
