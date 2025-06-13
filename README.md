@@ -1,3 +1,12 @@
+13.6.25  
+Collegato supabase e creato e sistemato il form (vedere solo validazione email onSubmit)  
+  
+riprendere dal richiamare la funzione auth.signUp al onSubmit  
+  
+  
+  
+  
+//
 US7 terminata  
 piccolo refactoring su apiKey  
   

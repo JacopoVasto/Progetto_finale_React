@@ -1,4 +1,5 @@
 import SearchButton from "./SearchButton";
+import { Link } from "react-router";
 
 export default function Header() {
 
@@ -13,9 +14,12 @@ export default function Header() {
                 <ul
                 tabIndex={0}
                 className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
-                    <li><a>ciao</a></li>
-                    <li><a>belli</a></li>
-                    <li><a>:*</a></li>
+                    <li>
+                        <Link to="/register" className="secondary"> Register </Link>
+                    </li>
+                    <li>
+                        <Link to="#" className="secondary"> Login </Link>
+                    </li>
                 </ul>
             </div>
         </div>
