@@ -1,3 +1,12 @@
+17.06.25
+continuare da: Retrive session and logout  
+  
+logica funzionante fino ad ora  
+Controllare e sistemare grafica della pagina di dettaglio.  
+sistemare la griglia delle schede per renderla più responsive  
+  
+  
+  
 13.6.25  
 Collegato supabase e creato e sistemato il form (vedere solo validazione email onSubmit)  
   
@@ -26,7 +35,7 @@ BUG dimensione variabile delle schede in base alla grandezza dell'immagine (riso
   
   
 US5 terminata  
-
+  
 Controllare e sistemare grafica della pagina di dettaglio.  
   
   

@@ -1,11 +1,14 @@
 import { useState } from "react";
+import supabase from "../../supabase/supabase-client"
 import {
   ConfirmSchema,
   getErrors,
   getFieldError,
 } from '../../lib/validationForm';
+import { useNavigate } from "react-router";
 
 export default function RegisterPage() {
+  const navigate = useNavigate();
   const [formSubmitted, setFormSubmitted] = useState(false);
   const [formErrors, setFormErrors] = useState({});
   const [touchedFields, setTouchedFields] = useState({});
@@ -20,13 +23,33 @@ export default function RegisterPage() {
   const onSubmit = async (event) => {
     event.preventDefault();
     setFormSubmitted(true);
-    const { error, data } = ConfirmSchema.safeParse(formState);
+    const { error, data } = ConfirmSchema.safeParse(formState);    
+    console.log(data);
+    
     if (error) {
       const errors = getErrors(error);
       setFormErrors(errors);
       console.log(errors);
+    } else {
+      let { error } = await supabase.auth.signUp({
+        email: data.email,
+        password: data.password,
+        options: {
+          data : {
+            first_name: data.firstName,
+            last_name: data.lastName,
+            username: data.username 
+          }
+        }
+      });
+      if (error) {
+        alert("Signing up error!");
+      } else {
+        alert("Signed up!")
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        navigate("/")
+      }
     }
-    console.log(data);
   };
 
   const onBlur = (property) => () => {
@@ -55,7 +78,7 @@ export default function RegisterPage() {
     }));
   };
 
-  const renderField = (id, label, type = "text") => (
+  const floatingLabel = (id, label, type = "text") => (
     <label className="form-control w-full floating-label relative">
       <span className="label-text">{label}</span>
       <input
@@ -68,6 +91,7 @@ export default function RegisterPage() {
         onChange={setField(id)}
         onBlur={onBlur(id)}
         aria-invalid={isInvalid(id)}
+        autoComplete={id === "password" ? "new-password" : "on"}
         required
       />
       {(touchedFields[id] || formSubmitted) && formErrors[id] && (
@@ -84,11 +108,11 @@ export default function RegisterPage() {
         <div className="card-body space-y-4">
           <h2 className="text-2xl font-bold text-center">Register</h2>
           <form onSubmit={onSubmit} noValidate className="space-y-4">
-            {renderField("email", "Email", "email")}
-            {renderField("firstName", "First Name")}
-            {renderField("lastName", "Last Name")}
-            {renderField("username", "Username")}
-            {renderField("password", "Password", "password")}
+            {floatingLabel("email", "Email", "email")}
+            {floatingLabel("firstName", "First Name")}
+            {floatingLabel("lastName", "Last Name")}
+            {floatingLabel("username", "Username")}
+            {floatingLabel("password", "Password", "password")}
 
             <button type="submit" className="btn w-full btnSpecial">
               Sign Up
