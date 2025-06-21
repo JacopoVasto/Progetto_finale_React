@@ -1,3 +1,12 @@
+21.06.2025  
+finita US8  
+  
+funziona tutto tranne il listener dell'header per i link in base all'auth  
+(probabilmente verrà trattato nel prossimo capitolo ma da tenere d'occhio)  
+  
+da sistemare l'email confirmation  
+aggiungere pass confirmation in register  
+
 17.06.25
 continuare da: Retrive session and logout  
   

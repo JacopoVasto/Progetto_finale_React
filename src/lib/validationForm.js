@@ -12,13 +12,18 @@ export const FormSchema = z.object({
   password: z.string().min(8).regex(passwordRegex, passwordError),
 });
 
+export const FormSchemaLogin = z.object({
+  email: z.string().email("Email non valida"),
+  password: z.string().min(1, "La password è obbligatoria"),
+})
+
 export const ConfirmSchema = FormSchema.refine((data) => data);
 
-export function getFieldError(property, value) {
-  const { error } = FormSchema.shape[property].safeParse(value);
-  return error
-    ? error.issues.map((issue) => issue.message).join(", ")
-    : undefined;
+export function getFieldError(schema, property, value) {
+  const { error } = z
+    .object({ [property]: schema.shape[property] })
+    .safeParse({ [property]: value });
+  return error ? error.issues[0].message : undefined;
 }
 
 export const getErrors = (error) =>

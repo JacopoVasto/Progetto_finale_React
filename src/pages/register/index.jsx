@@ -59,7 +59,7 @@ export default function RegisterPage() {
       setTouchedFields((prev) => ({ ...prev, [property]: false }));
       return;
     }
-    const message = getFieldError(property, value);
+  const message = getFieldError(FormSchema, property, value);
     setFormErrors((prev) => ({ ...prev, [property]: message }));
     setTouchedFields((prev) => ({ ...prev, [property]: true }));
   };
