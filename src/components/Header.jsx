@@ -1,31 +1,35 @@
+import { useContext } from "react";
+import SessionContext from "../context/SessionContext";
 import SearchButton from "./SearchButton";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useEffect, useState } from "react";
 import supabase from "../supabase/supabase-client";
 
 export default function Header() {
-    const [session, setSession] = useState(null);
+    const navigate = useNavigate();
+    const { session } = useContext(SessionContext);
 
-    const getSession = async () => {
-        const { data } = await supabase.auth.getSession();
-        if (data.session) {
-            console.log(data);
-            setSession(data);                
-            } else {
-                setSession(null)
-            }
-    }
+    // const getSession = async () => {
+    //     const { data } = await supabase.auth.getSession();
+    //     if (data.session) {
+    //         console.log(data);
+    //         setSession(data);                
+    //         } else {
+    //             setSession(null)
+    //         }
+    // }
 
     const signOut = async () => {
         const { error } = await supabase.auth.signOut()
         if (error) console.log(error);
-        alert('Signed out')
-        getSession();
+        alert('Signed out');
+        // getSession();
+        navigate("/");
     }
 
-    useEffect(() => {
-        getSession();
-    }, []);
+    // useEffect(() => {
+    //     getSession();
+    // }, []);
 
     return (
         <div className="navbar bg-base-100 shadow-sm">
@@ -47,7 +51,8 @@ export default function Header() {
             </div>
         </div>
             <div className="navbar-center">
-                <a className="btn btn-ghost text-xl">VAULT</a>
+                <Link to="/" className="text-xl">VAULT</Link>
+                {/* <a className="btn btn-ghost text-xl">VAULT</a> */}
             </div>
         <div className="navbar-end">
                 {/* bottone di ricerca */}
