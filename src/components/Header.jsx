@@ -45,6 +45,12 @@ export default function Header() {
                     </ul>
                 ) : (
                     <ul className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
+                        <li>
+                            <summary>Hey {session?.user.user_metadata.first_name} </summary>
+                        </li>
+                        <li>
+                            <Link to="/account">Account</Link>
+                        </li>
                         <li><button onClick={signOut}>Logout</button></li>
                     </ul>
                 )}
