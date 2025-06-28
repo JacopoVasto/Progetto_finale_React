@@ -1,3 +1,11 @@
+28.06.2025  
+Manca ultimo capitolo di US11 (manage favorites list)  
+Funziona ma con codice diverso rispetto a quella della doc.  
+(controllare useEffect di FavoriteProvider)  
+
+  - sistemate in parte schede e pagina di dettaglio  
+  
+  
 22.06.2025  
 finita US9 e US10  
 sistemare form per modifica account e aggiungere avatar su Header  
