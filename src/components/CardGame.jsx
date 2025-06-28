@@ -14,12 +14,14 @@ export default function CardGame({ game }) {
 
   return (
     <div className="card w-full sm:w-11/12 md:w-80 bg-base-100 shadow-sm cardSpecial">
-      <figure className="w-full aspect-[3/2] overflow-hidden rounded-md relative">
-        <LazyLoadGameImage
-          image={game.background_image}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      </figure>
+      <Link to={`/games/${game.slug}/${game.id}`}>
+        <figure className="w-full aspect-[3/2] overflow-hidden rounded-md relative">
+          <LazyLoadGameImage
+            image={game.background_image}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+        </figure>
+      </Link>
       <div className="card-body">
         <h2 className="card-title">{game.name}</h2>
         <div className="flex flex-wrap gap-1">{genres}</div>
