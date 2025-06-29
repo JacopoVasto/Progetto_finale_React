@@ -1,3 +1,10 @@
+29.06.2025  
+Finito US11  
+Sistemare pagina profiles  
+(far controllare ancora punto 28.06.2025)  
+  
+  
+  
 28.06.2025  
 Manca ultimo capitolo di US11 (manage favorites list)  
 Funziona ma con codice diverso rispetto a quella della doc.  
