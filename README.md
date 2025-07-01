@@ -1,3 +1,9 @@
+01/07/2025  
+US12 terminata ma da rivedere  
+sito instabile, chat non funzionante  
+  
+  
+  
 29.06.2025  
 Finito US11  
 Sistemare pagina profiles  
