@@ -42,7 +42,7 @@ import { rawgApiKey } from "../../api/apiKeys";
 import { useParams } from "react-router";
 import useFetchSolution from "../../hook/useFetchSolution";
 import ToggleFavorite from "../../components/ToggleFavorite";
-import RealtimeChat from "../../components/RealtimeChat";
+import Chatbox from "../../components/Chatbox";
 
 export default function GamePage() {
   const { id } = useParams();
@@ -95,7 +95,7 @@ export default function GamePage() {
             </div>
           </div>
         </div>
-        <RealtimeChat />
+        <Chatbox data={data} />
       </div>
     )
   );

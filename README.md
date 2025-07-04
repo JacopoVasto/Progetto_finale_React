@@ -1,3 +1,8 @@
+04/07/2025  
+REALCHAT FUNZIONA!!!!
+  
+  
+  
 01/07/2025  
 US12 terminata ma da rivedere  
 sito instabile, chat non funzionante  

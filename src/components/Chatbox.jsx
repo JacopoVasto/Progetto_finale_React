@@ -6,10 +6,11 @@ import RealtimeChat from "./RealtimeChat";
 export default function Chatbox({ data }) {
   const { session } = useContext(SessionContext);
 
-  const HandleMessageSubmit = async (event) => {
+  const handleMessageSubmit = async (event) => {
     event.preventDefault();
     const inputMessage = event.currentTarget;
     const { message } = Object.fromEntries(new FormData(inputMessage));
+
     if (typeof message === "string" && message.trim().length !== 0) {
       const { error } = await supabase
         .from("messages")
@@ -22,6 +23,7 @@ export default function Chatbox({ data }) {
           },
         ])
         .select();
+
       if (error) {
         console.log(error);
       } else {
@@ -32,13 +34,15 @@ export default function Chatbox({ data }) {
 
   return (
     <>
-      <h4>Gamers Chat</h4>
-      <div>{ RealtimeChat }</div>
+      <h4>Gamers chat</h4>
+      <div>
+        <RealtimeChat data={data && data} />
+      </div>
       <div>
         <form onSubmit={handleMessageSubmit}>
           <fieldset role="group">
             <input type="text" name="message" placeholder="Chat..." />
-            <button type="submit">Send</button>
+            <button type="submit">Invia</button>
           </fieldset>
         </form>
       </div>

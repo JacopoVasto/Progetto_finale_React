@@ -12,7 +12,7 @@ const chatContainer = {
   flexDirection: 'column',
   justifyContent: 'space-between',
   backgroundColor: '#1b212b',
-  overFlowY: 'scroll'
+  overflowY: 'scroll'
 }
 
 dayjs.extend(relativeTime);
@@ -44,25 +44,39 @@ export default function RealtimeChat({ data }) {
   }, [data?.id]);
 
   useEffect(() => {
-    if (data) {
-      getInitialMessages();
-    }
+    if (!data?.id) return;
+
+    // fetch iniziale
+    getInitialMessages();
+
+    // creiamo il canale
     const channel = supabase
-      .channel("messages")
+      .channel(`messages_game_${data.id}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "messages" },
-        () => gatInitialMessages()
+        {
+          event: "INSERT",
+          schema: "public",
+          table: "messages",
+          filter: `game_id=eq.${data.id}`,
+        },
+        ({ new: newMsg }) => {
+          setMessages((prev) => [...prev, newMsg]);
+        }
       )
       .subscribe();
 
-      return () => {
-        if (channel) {
-          supabase.removeChannel(channel);
-        }
+    // cleanup: unsubscribe e silenzia ogni errore
+    return () => {
+      try {
         channel.unsubscribe();
-      };
-  }, [data, getInitialMessages]);
+      } catch (err) {
+        console.warn("Errore durante unsubscribe:", err);
+      }
+    };
+  }, [data.id, getInitialMessages]);
+
+
 
   useEffect(() => {
     scrollSmoothtoBottom();
@@ -73,7 +87,7 @@ export default function RealtimeChat({ data }) {
       {loadingInitial && <progress></progress>}
       {error && <article>{error}</article>}
       {messages &&
-        message.map((message) => (
+        messages.map((message) => (
           <article key={message.id}>
             <p>{message.profile_username}</p>
             <small>{message.content}</small>
