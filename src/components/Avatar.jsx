@@ -2,74 +2,72 @@ import { useEffect, useState } from "react";
 import supabase from "../supabase/supabase-client";
 
 export default function Avatar({ url, size, onUpload }) {
-  const [avatarUrl, setAvatarUrl] = useState(null)
-  const [uploading, setUploading] = useState(false)
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const fallback = "https://<tuo-progetto>.supabase.co/storage/v1/object/public/avatars/vault_profile_logo.png";
 
   useEffect(() => {
-    if (url) downloadImage(url)
-  }, [url])
+    if (!url) return setAvatarUrl(fallback);
+    // Se è già un link completo
+    if (url.startsWith("http")) return setAvatarUrl(url);
 
-  const downloadImage = async (path) => {
-    try {
-      const { data, error } = await supabase.storage.from('avatars').download(path)
-      if (error) {
-        throw error
-      }
-      const url = URL.createObjectURL(data)
-      setAvatarUrl(url)
-    } catch (error) {
-      console.log('Error downloading image: ', error.message);
+    // Altrimenti url è solo il fileName: genero publicUrl
+    const { data, error } = supabase
+      .storage
+      .from("avatars")
+      .getPublicUrl(url);
+    if (error) {
+      console.error("getPublicUrl error:", error.message);
+      setAvatarUrl(fallback);
+    } else {
+      setAvatarUrl(data.publicUrl);
     }
-  }
+  }, [url]);
 
-  const uploadAvatar = async (event) => {
+  const uploadAvatar = async (e) => {
+    setUploading(true);
     try {
-      setUploading(true)
+      const file = e.target.files[0];
+      if (!file) throw new Error("Seleziona un’immagine");
 
-      if (!event.target.files || event.target.files.length === 0) {
-        throw new Error('You must select an image to upload.')
-      }
+      const ext = file.name.split(".").pop();
+      // nome sempre unico per non sovrascrivere
+      const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
 
-      const file = event.target.files[0]
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${Math.random()}.${fileExt}`
-      const filePath = `${fileName}`
+      const { error } = await supabase
+        .storage
+        .from("avatars")
+        .upload(fileName, file);
+      if (error) throw error;
 
-      const { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
-
-      if (uploadError) {
-        throw uploadError
-      }
-
-      onUpload(event, filePath)
-    } catch (error) {
-      alert(error.message)
-    } finally {
-      setUploading(false)
+      // salvo in profiles.avatar_url via callback
+      onUpload(e, fileName);
+    } catch (err) {
+      alert(err.message);
     }
-  }
+    setUploading(false);
+  };
 
   return (
     <div>
-      {avatarUrl ? (
-        <img 
-          src={avatarUrl} 
-          alt="Avatar"
-          className="avatar image"
-          style={{ height: size, width: size, boxShadow: "3px 3px 8px black" }}
-        />
-      ) : (
-        <div className="avatar no-image" style={{ height: size, width: size }} />
-      )}
-      <div className="mt-2" style={{ width: size }}>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={uploadAvatar}
-          disabled={uploading}
-          className="file-input file-input-bordered w-full max-w-xs"
-        />
-      </div>
+      <img
+        src={avatarUrl}
+        alt="Avatar"
+        style={{
+          width: size,
+          height: size,
+          borderRadius: "50%",
+          objectFit: "cover",
+          boxShadow: "3px 3px 8px #000",
+        }}
+      />
+      <input
+        type="file"
+        accept="image/*"
+        onChange={uploadAvatar}
+        disabled={uploading}
+        className="file-input file-input-bordered w-full max-w-xs mt-3"
+      />
     </div>
-  )
+  );
 }

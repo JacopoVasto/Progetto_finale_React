@@ -1,3 +1,9 @@
+09/07/2025  
+Momenti di panico ma chat e avatar funzionano alla perfezione.  
+  
+  
+  
+  
 04/07/2025  
 REALCHAT FUNZIONA!!!!
   
