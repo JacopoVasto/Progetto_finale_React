@@ -17,7 +17,6 @@ export default function Chatbox({ data }) {
         .insert([
           {
             profile_id: session?.user.id,
-            profile_username: session?.user.user_metadata.username,
             game_id: data.id,
             content: message,
           },
@@ -41,7 +40,7 @@ export default function Chatbox({ data }) {
       <div>
         <form onSubmit={handleMessageSubmit}>
           <fieldset role="group">
-            <input type="text" name="message" placeholder="Chat..." />
+            <input type="text"  autoComplete="off" name="message" placeholder="Chat..." />
             <button type="submit">Invia</button>
           </fieldset>
         </form>
