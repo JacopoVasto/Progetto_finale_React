@@ -31,6 +31,10 @@ export default function useFetchSolution(initialUrl) {
     }, [url]);
 
     useEffect(() => {
+        updateUrl(initialUrl);
+    }, [initialUrl]);
+    
+    useEffect(() => {
         load();
     }, [load]);
 

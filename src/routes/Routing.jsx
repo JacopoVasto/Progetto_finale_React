@@ -9,6 +9,7 @@ import RegisterPage from "../pages/register";
 import LoginPage from "../pages/login";
 import AccountPage from "../pages/account";
 import ProfilePage from "../pages/profile";
+import LayoutWithoutSidebar from "../layout/LayoutWithoutSidebar";
 
 export function Routing() {
     return (
@@ -16,10 +17,13 @@ export function Routing() {
         <Routes>
             <Route element={<Layout />}>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/games/:genre" element={<GenrePage />} />
                 <Route path="/games/:slug/:id" element={<GamePage />} />
                 <Route path="/search" element={<SearchPage />} />
+            </Route>
+
+            <Route element={<LayoutWithoutSidebar />}>
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/account" element={<AccountPage />} />

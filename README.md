@@ -1,4 +1,9 @@
-09/07/2025  
+09/07/2025.2  
+Eliminata sidebar su pagine in cui non serviva  
+  
+  
+  
+09/07/2025.1  
 Momenti di panico ma chat e avatar funzionano alla perfezione.  
   
   
