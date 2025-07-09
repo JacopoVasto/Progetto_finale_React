@@ -148,7 +148,7 @@ export default function RealtimeChat({ data }) {
       {error && <div className="text-red-500 mb-2">{error}</div>}
 
       {grouped.map((grp) => {
-        const isOwn = session.user.id === grp.profile_id;
+        const isOwn = session?.user?.id === grp.profile_id;
         const { username, avatar_url } = grp.profiles || {};
         const key = `${grp.profile_id}-${grp.items[0]?.id}`;
         return (
