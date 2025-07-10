@@ -13,7 +13,7 @@ export default function CardGame({ game }) {
   ));
 
   return (
-    <div className="card w-full sm:w-11/12 md:w-80 bg-base-100 shadow-sm cardSpecial">
+    <div className="card w-full bg-base-100 shadow-sm cardSpecial flex flex-col h-full">
       <Link to={`/games/${game.slug}/${game.id}`}>
         <figure className="w-full aspect-[3/2] overflow-hidden rounded-md relative">
           <LazyLoadGameImage
@@ -22,11 +22,12 @@ export default function CardGame({ game }) {
           />
         </figure>
       </Link>
-      <div className="card-body">
+
+      <div className="card-body flex flex-col flex-grow">
         <h2 className="card-title">{game.name}</h2>
         <div className="flex flex-wrap gap-1">{genres}</div>
         <p>{game.released}</p>
-        <div className="card-actions justify-end">
+        <div className="card-actions justify-end mt-auto">
           <Link to={`/games/${game.slug}/${game.id}`} className="w-full">
             <button className="btn w-full btnSpecial">
               Visita il gioco
@@ -36,4 +37,5 @@ export default function CardGame({ game }) {
       </div>
     </div>
   );
+
 }
