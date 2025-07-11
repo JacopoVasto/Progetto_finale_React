@@ -11,17 +11,17 @@
 }
 
 .genreBadge {
-    background-color: rgba(128, 0, 128, 0.189);
+    background-color: rgb(155, 33, 226, 0.189);
 }
 
 .genreBadge:hover {
-    background-color: rgba(128, 0, 128);
+    background-color: rgb(155, 33, 226);
 }
 
 .btnSpecial {
-    background-color: rgba(128, 0, 128, 0.189);
+    background-color: rgb(155, 33, 226, 0.189);
 }
 
 .btnSpecial:hover {
-    background-color: rgba(128, 0, 128);
+    background-color: rgb(156, 33, 226);
 }

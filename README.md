@@ -1,3 +1,12 @@
+11/07/2025  
+migliorata UIex.  
+Sostituiti alert con modal (da completare la sostituzione),  
+Integrata la gestione dei preferiti nella pagina account (bisogna eliminare la pagina PROFILE!)  
+Sistemati alcuni pulsanti  
+Allineare meglio la pagina Account  
+  
+  
+  
 09/07/2025.2  
 Eliminata sidebar su pagine in cui non serviva  
   

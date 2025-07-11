@@ -1,66 +1,74 @@
-import { useEffect, useState } from "react";
+import { useState, useRef } from "react";
 import supabase from "../supabase/supabase-client";
+import Modal from "./Modal";
 
 export default function Avatar({ url, size, onUpload }) {
-  const [avatarUrl, setAvatarUrl] = useState(null);
   const [uploading, setUploading] = useState(false);
-  const fallback = "https://<tuo-progetto>.supabase.co/storage/v1/object/public/avatars/vault_profile_logo.png";
-
-  useEffect(() => {
-    if (!url) return setAvatarUrl(fallback);
-    // Se è già un link completo
-    if (url.startsWith("http")) return setAvatarUrl(url);
-
-    // Altrimenti url è solo il fileName: genero publicUrl
-    const { data, error } = supabase
-      .storage
-      .from("avatars")
-      .getPublicUrl(url);
-    if (error) {
-      console.error("getPublicUrl error:", error.message);
-      setAvatarUrl(fallback);
-    } else {
-      setAvatarUrl(data.publicUrl);
-    }
-  }, [url]);
+  const [imgLoading, setImgLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
+  const errorModalRef = useRef(null);
 
   const uploadAvatar = async (e) => {
     setUploading(true);
     try {
       const file = e.target.files[0];
-      if (!file) throw new Error("Seleziona un’immagine");
-
+      if (!file) throw new Error("Select an image file");
       const ext = file.name.split(".").pop();
-      // nome sempre unico per non sovrascrivere
       const fileName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
-
       const { error } = await supabase
         .storage
         .from("avatars")
         .upload(fileName, file);
       if (error) throw error;
-
-      // salvo in profiles.avatar_url via callback
       onUpload(e, fileName);
+      setImgLoading(true); // reset loading for new image
     } catch (err) {
-      alert(err.message);
+      setErrorMessage(err.message);
+      errorModalRef.current?.showModal();
     }
     setUploading(false);
   };
 
   return (
     <div>
-      <img
-        src={avatarUrl}
-        alt="Avatar"
+      <div
         style={{
+          position: "relative",
           width: size,
           height: size,
           borderRadius: "50%",
-          objectFit: "cover",
-          boxShadow: "3px 3px 8px #000",
+          boxShadow: "3px 3px 8px rgba(0,0,0,0.5)",
+          overflow: "hidden",
         }}
-      />
+      >
+        {imgLoading && (
+          <div
+            className="loading loading-ring loading-xl"
+            style={{
+              width: "100%",
+              height: "100%",
+              borderRadius: "50%",
+              borderWidth: "4px",
+            }}
+          />
+        )}
+
+        {url && (
+          <img
+            src={url}
+            alt={imgLoading ? "" : "Avatar"}
+            onLoad={() => setImgLoading(false)}
+            onError={() => setImgLoading(false)}
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: imgLoading ? "none" : "block",
+            }}
+          />
+        )}
+      </div>
+
       <input
         type="file"
         accept="image/*"
@@ -68,6 +76,14 @@ export default function Avatar({ url, size, onUpload }) {
         disabled={uploading}
         className="file-input file-input-bordered w-full max-w-xs mt-3"
       />
+
+      <Modal
+        id="error-avatar-modal"
+        ref={errorModalRef}
+        title="Error during upload"
+      >
+        <p>{errorMessage}</p>
+      </Modal>
     </div>
   );
 }

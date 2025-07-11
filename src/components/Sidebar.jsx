@@ -22,7 +22,7 @@ export default function Sidebar() {
 
         <label
           htmlFor="mobile-filter-drawer"
-          className="btn btn-primary btn-circle fixed bottom-4 left-4 z-50 shadow-lg sm:hidden peer-checked:hidden"
+          className="btn btn-circle btnSpecial fixed bottom-4 left-4 z-50 shadow-lg sm:hidden peer-checked:hidden"
           title="Filtra per genere"
         >
           <Filter className="w-5 h-5" />

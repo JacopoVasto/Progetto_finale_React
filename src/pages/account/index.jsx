@@ -1,25 +1,42 @@
-import { useState, useEffect, useContext, useCallback } from 'react';
+import { useState, useEffect, useContext, useCallback, useRef } from 'react';
 import supabase from '../../supabase/supabase-client';
 import SessionContext from '../../context/SessionContext';
+import FavoritesContext from '../../context/FavoritesContext';
 import Avatar from '../../components/Avatar';
+import Modal from '../../components/Modal';
+import { Trash2 } from 'lucide-react';
 
 // Fallback path nel bucket
 const fallbackAvatarPath = 'vault_profile_logo.png';
+// Stile lista preferiti
+const favoriteGameUI = {
+  display: 'flex',
+  justifyContent: 'space-between',
+  alignItems: 'center',
+  marginBottom: '0.5rem'
+};
 
 export default function AccountPage() {
   const { session } = useContext(SessionContext);
+  const { favorites, removeFavorite } = useContext(FavoritesContext);
   const userId = session.user.id;
 
   const [loading, setLoading] = useState(true);
   const [username, setUsername] = useState('');
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
-  // path corrente nel bucket (es. "12345.png")
   const [avatarPath, setAvatarPath] = useState(fallbackAvatarPath);
-  // url visualizzato (rigenerato solo al submit)
   const [avatarUrl, setAvatarUrl] = useState('');
 
-  // Genera Signed URL valida 7 giorni
+  // Modal refs
+  const errorModalRef = useRef(null);
+  const favModalRef = useRef(null);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Local copy of favorites for modal editing, with marked flag
+  const [localFavorites, setLocalFavorites] = useState([]);
+
+  // Generate signed URL valid for 7 days
   const makeSignedUrl = useCallback(async (path) => {
     try {
       const { data, error } = await supabase
@@ -33,7 +50,7 @@ export default function AccountPage() {
     }
   }, []);
 
-  // Carica profilo e URL avatar corrente
+  // Load profile and avatar URL
   useEffect(() => {
     const loadProfile = async () => {
       setLoading(true);
@@ -57,7 +74,7 @@ export default function AccountPage() {
     loadProfile();
   }, [userId, makeSignedUrl]);
 
-  // Salva tutti i campi (incluso avatarPath)
+  // Save all fields (including avatarPath)
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -77,27 +94,50 @@ export default function AccountPage() {
       .eq('id', userId);
 
     if (error) {
-      alert('Errore aggiornamento profilo: ' + error.message);
+      setErrorMessage(`Profile update error: ${error.message}`);
+      errorModalRef.current?.showModal();
     } else {
-      // rigenera signed URL per il nuovo avatar
       const url = await makeSignedUrl(avatarPath);
       setAvatarUrl(url);
-      alert('Profilo aggiornato!');
+      setErrorMessage('Profile updated successfully!');
+      errorModalRef.current?.showModal();
     }
     setLoading(false);
   };
 
-    // Aggiorna il path e mostra subito l’anteprima
+  // Update path and preview avatar without saving to DB
   const handleAvatarUpload = async (_event, newPath) => {
     setAvatarPath(newPath);
-    // rigenera l'URL per anteprima, senza salvare sul DB
     setLoading(true);
     const url = await makeSignedUrl(newPath);
     setAvatarUrl(url);
     setLoading(false);
   };
 
-  // Helper form field
+  // Open favorites modal and initialize localFavorites with marked=false
+  const openFavoritesModal = () => {
+    setLocalFavorites(favorites.map(fav => ({ ...fav, marked: false })));
+    favModalRef.current?.showModal();
+  };
+
+  // Toggle marked state for a game
+  const toggleMark = (id) => {
+    setLocalFavorites(lfs => lfs.map(lf => lf.id === id ? { ...lf, marked: !lf.marked } : lf));
+  };
+
+  // Save changes: remove only marked items
+  const handleSaveFavorites = () => {
+    localFavorites
+      .filter(lf => lf.marked)
+      .forEach(lf => removeFavorite(lf.game_id));
+    favModalRef.current?.close();
+  };
+
+  // Cancel without saving
+  const handleCancelFavorites = () => {
+    favModalRef.current?.close();
+  };
+
   const floatingLabel = (id, label, value, setter, type = 'text', required = false) => (
     <label className="form-control w-full floating-label relative" htmlFor={id}>
       <span className="label-text">{label}</span>
@@ -121,37 +161,93 @@ export default function AccountPage() {
 
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Avatar */}
-        <Avatar
-          url={avatarUrl}
-          size={150}
-          onUpload={handleAvatarUpload}
-        />
+        <Avatar url={avatarUrl} size={150} onUpload={handleAvatarUpload} />
 
-        {/* Email non editabile */}
-        <div>
-          <label className="label-text">Email</label>
-          <input
-            type="email"
-            value={session.user.email}
-            disabled
-            className="input input-md input-bordered w-full bg-gray-100"
-          />
-        </div>
+        {/* Email read-only */}
+         <label className="form-control w-full floating-label relative" htmlFor="eMail">
+      <span className="label-text">eMail</span>
+      <input
+        id="eMail"
+        name="eMail"
+        type="email"
+        className="input input-md input-bordered w-full pr-12"
+        value={session.user.email}
+        onChange={(e) => setter(e.target.value)}
+        disabled
+      />
+    </label>
 
-        {/* Campi testo */}
+        {/* Text fields */}
         {floatingLabel('username', 'Username', username, setUsername, 'text', true)}
         {floatingLabel('first_name', 'First name', firstName, setFirstName)}
         {floatingLabel('last_name', 'Last name', lastName, setLastName)}
 
-        {/* Bottone salva */}
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btn-primary w-full"
-        >
+        {/* Save button */}
+        <button type="submit" disabled={loading} className="btn btnSpecial w-full">
           {loading ? 'Saving...' : 'Save Changes'}
         </button>
       </form>
+
+      {/* Button to open favorites modal */}
+      <button
+        type="button"
+        className="btn btn-secondary mt-6 w-full"
+        onClick={openFavoritesModal}
+      >
+        Manage Favorites
+      </button>
+
+      {/* Favorites management modal */}
+      <Modal
+        id="favorites-modal"
+        ref={favModalRef}
+        title="Manage Favorites"
+        showCloseButton={false}
+      >
+        {/* Scrollable favorites list */}
+        <div className="overflow-y-auto max-h-[50vh]">
+          {localFavorites.length === 0 ? (
+            <p>No favorites at the moment...</p>
+          ) : (
+            <ul>
+              {localFavorites.map((game) => (
+                <li key={game.id} style={favoriteGameUI}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <img
+                      width={50}
+                      height={50}
+                      src={game.game_image}
+                      alt={`Cover for ${game.game_name}`} 
+                      className="mr-2"
+                    />
+                    <span>{game.game_name}</span>
+                  </div>
+                  <button
+                    className={`btn btn-sm ${game.marked ? 'btn-error' : ''}`}
+                    onClick={() => toggleMark(game.id)}
+                  >
+                    <Trash2 size={16} />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        {/* Always-visible action buttons */}
+        <div className="modal-action">
+          <button className="btn" onClick={handleCancelFavorites}>Cancel</button>
+          <button className="btn btn-primary" onClick={handleSaveFavorites}>Save</button>
+        </div>
+      </Modal>
+
+      {/* Error/success modal */}
+      <Modal
+        id="error-account-modal"
+        ref={errorModalRef}
+        title={errorMessage.startsWith('Profile updated') ? 'Success' : 'Error'}
+      >
+        <p>{errorMessage}</p>
+      </Modal>
     </div>
   );
 }
