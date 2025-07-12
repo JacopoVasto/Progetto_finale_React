@@ -8,7 +8,6 @@ import Layout from '../layout/Layout';
 import RegisterPage from "../pages/register";
 import LoginPage from "../pages/login";
 import AccountPage from "../pages/account";
-import ProfilePage from "../pages/profile";
 import LayoutWithoutSidebar from "../layout/LayoutWithoutSidebar";
 
 export function Routing() {
@@ -23,7 +22,6 @@ export function Routing() {
             </Route>
 
             <Route element={<LayoutWithoutSidebar />}>
-                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/register" element={<RegisterPage />} />
                 <Route path="/login" element={<LoginPage />} />
                 <Route path="/account" element={<AccountPage />} />

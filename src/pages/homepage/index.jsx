@@ -10,7 +10,7 @@ export default function HomePage() {
 
 return (
   <>
-    <h1 className="text-center text-2xl font-bold my-6">Home Page</h1>
+    <h1 className="text-4xl font-bold mb-6">Home Page</h1>
 
     {error && <h1>{error}</h1>}
 

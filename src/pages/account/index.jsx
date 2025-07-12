@@ -235,8 +235,8 @@ export default function AccountPage() {
         </div>
         {/* Always-visible action buttons */}
         <div className="modal-action">
-          <button className="btn" onClick={handleCancelFavorites}>Cancel</button>
-          <button className="btn btn-primary" onClick={handleSaveFavorites}>Save</button>
+          <button className="btn btn-error" onClick={handleCancelFavorites}>Cancel</button>
+          <button className="btn btnSpecial" onClick={handleSaveFavorites}>Save</button>
         </div>
       </Modal>
 

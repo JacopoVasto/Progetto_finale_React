@@ -9,7 +9,7 @@ const Modal = forwardRef(({ id, title, children, showCloseButton = true }, ref) 
       {showCloseButton && (
         <div className="modal-action">
           <form method="dialog">
-            <button className="btn">Close</button>
+            <button className="btn btnSpecial">Close</button>
           </form>
         </div>
       )}

@@ -1,11 +1,12 @@
-import { useState } from "react";
-import supabase from "../../supabase/supabase-client"
+import React, { useState, useRef } from "react";
+import { useNavigate } from "react-router";
+import supabase from "../../supabase/supabase-client";
 import {
   ConfirmSchema,
   getErrors,
   getFieldError,
 } from '../../lib/validationForm';
-import { useNavigate } from "react-router";
+import Modal from '../../components/Modal';
 
 export default function RegisterPage() {
   const navigate = useNavigate();
@@ -20,35 +21,37 @@ export default function RegisterPage() {
     password: "",
   });
 
+  // Sign-up modal state
+  const [signMessage, setSignMessage] = useState("");
+  const [signSuccess, setSignSuccess] = useState(false);
+  const signModalRef = useRef(null);
+
   const onSubmit = async (event) => {
     event.preventDefault();
     setFormSubmitted(true);
-    const { error, data } = ConfirmSchema.safeParse(formState);    
-    console.log(data);
-    
+    const { error, data } = ConfirmSchema.safeParse(formState);
     if (error) {
-      const errors = getErrors(error);
-      setFormErrors(errors);
-      console.log(errors);
+      setFormErrors(getErrors(error));
     } else {
-      let { error } = await supabase.auth.signUp({
+      const { error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
         options: {
-          data : {
+          data: {
             first_name: data.firstName,
             last_name: data.lastName,
-            username: data.username 
-          }
-        }
+            username: data.username,
+          },
+        },
       });
-      if (error) {
-        alert("Signing up error!");
+      if (authError) {
+        setSignMessage("Sign-up error: Please try again.");
+        setSignSuccess(false);
       } else {
-        alert("Signed up!")
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-        navigate("/")
+        setSignMessage("Signed up successfully!");
+        setSignSuccess(true);
       }
+      signModalRef.current?.showModal();
     }
   };
 
@@ -59,7 +62,7 @@ export default function RegisterPage() {
       setTouchedFields((prev) => ({ ...prev, [property]: false }));
       return;
     }
-  const message = getFieldError(FormSchema, property, value);
+    const message = getFieldError(ConfirmSchema, property, value);
     setFormErrors((prev) => ({ ...prev, [property]: message }));
     setTouchedFields((prev) => ({ ...prev, [property]: true }));
   };
@@ -68,13 +71,12 @@ export default function RegisterPage() {
     if (formSubmitted || touchedFields[property]) {
       return !!formErrors[property];
     }
-    return undefined;
   };
 
-  const setField = (property, valueSelector) => (e) => {
+  const setField = (property) => (e) => {
     setFormState((prev) => ({
       ...prev,
-      [property]: valueSelector ? valueSelector(e) : e.target.value,
+      [property]: e.target.value,
     }));
   };
 
@@ -83,7 +85,9 @@ export default function RegisterPage() {
       <span className="label-text">{label}</span>
       <input
         placeholder={label}
-        className={`input input-md input-bordered w-full ${isInvalid(id) && "input-error"} pr-12`}
+        className={`input input-md input-bordered w-full ${
+          isInvalid(id) ? "input-error" : ""
+        } pr-12`}
         type={type}
         id={id}
         name={id}
@@ -95,7 +99,10 @@ export default function RegisterPage() {
         required
       />
       {(touchedFields[id] || formSubmitted) && formErrors[id] && (
-        <div className="absolute right-3 top-1/2 -translate-y-1/2 tooltip tooltip-left z-20" data-tip={formErrors[id]}>
+        <div
+          className="absolute right-3 top-1/2 -translate-y-1/2 tooltip tooltip-left z-20"
+          data-tip={formErrors[id]}
+        >
           <div className="badge badge-error text-xs cursor-help">!</div>
         </div>
       )}
@@ -103,23 +110,33 @@ export default function RegisterPage() {
   );
 
   return (
-    <div className="flex justify-center items-center min-h-screen">
-      <div className="card w-full max-w-md shadow-xl bg-base-200">
-        <div className="card-body space-y-4">
-          <h2 className="text-2xl font-bold text-center">Register</h2>
-          <form onSubmit={onSubmit} noValidate className="space-y-4">
-            {floatingLabel("email", "Email", "email")}
-            {floatingLabel("firstName", "First Name")}
-            {floatingLabel("lastName", "Last Name")}
-            {floatingLabel("username", "Username")}
-            {floatingLabel("password", "Password", "password")}
+    <>
+      <div className="flex justify-center items-center min-h-screen">
+        <div className="card w-full max-w-md shadow-xl bg-base-200">
+          <div className="card-body space-y-4">
+            <h2 className="text-2xl font-bold text-center">Register</h2>
+            <form onSubmit={onSubmit} noValidate className="space-y-4">
+              {floatingLabel("email", "Email", "email")}
+              {floatingLabel("firstName", "First Name")}
+              {floatingLabel("lastName", "Last Name")}
+              {floatingLabel("username", "Username")}
+              {floatingLabel("password", "Password", "password")}
 
-            <button type="submit" className="btn w-full btnSpecial">
-              Sign Up
-            </button>
-          </form>
+              <button type="submit" className="btn w-full btnSpecial">
+                Sign Up
+              </button>
+            </form>
+          </div>
         </div>
       </div>
-    </div>
+
+      <Modal
+        id="signup-modal"
+        ref={signModalRef}
+        title="SignUp"
+      >
+        <p className="py-4">{signMessage}</p>
+      </Modal>
+    </>
   );
 }

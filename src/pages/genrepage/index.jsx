@@ -12,7 +12,7 @@ export default function GenrePage () {
     
     return (
         <>
-            <h2 className="text-center text-2xl font-bold my-6">Search by {genre}</h2>
+            <h2 className="text-4xl font-bold mb-6">Search by {genre}</h2>
     {error && <h1>{error}</h1>}
 
     {loading && (
