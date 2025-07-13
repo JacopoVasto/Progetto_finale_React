@@ -18,7 +18,7 @@ export default function GenrePage () {
     {loading && (
       <div className="flex justify-center items-center my-4">
         <span className="loading loading-ring loading-xl" />
-        <span className="ml-4">Caricamento...</span>
+        <span className="ml-4">Loading...</span>
       </div>
     )}
 

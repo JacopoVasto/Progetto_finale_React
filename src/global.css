@@ -1,15 +1,91 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+
+[class*="bg-"] {
+  transition: background-color 0.5s ease-in-out;
+}
+
+[class*="text-"] {
+  transition: color 0.5s ease-in-out;
+}
+[class*="border-"] {
+  transition: border-color 0.5s ease-in-out;
+}
+
+[class*="ring-"], [class*="focus:ring-"] {
+  transition: box-shadow 0.5s ease-in-out;
+}
+
+/* background animato */
+.bg-diagonal-lines {
+  background-color: var(--base-200);
+  position: relative;
+  overflow: hidden;
+}
+
+.bg-diagonal-lines::before,
+.bg-diagonal-lines::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-repeat: repeat;
+  background-attachment: fixed;
+}
+
+/* Righe pari */
+.bg-diagonal-lines::before {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(155,33,226,0.5) 0px,
+    rgba(155,33,226,0.5) 1px,
+    transparent 1px,
+    transparent 50px
+  );
+  animation: fadeLinesA 4s linear infinite;
+}
+
+/* Righe dispari, sfalsate di 25px */
+.bg-diagonal-lines::after {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent 0px,
+    transparent 25px,
+    rgba(155,33,226,0.5) 25px,
+    rgba(155,33,226,0.5) 26px,
+    transparent 26px,
+    transparent 75px
+  );
+  animation: fadeLinesB 4s linear infinite;
+  animation-delay: 2s;
+}
+
+@keyframes fadeLinesA {
+  0%   { opacity: 1; }
+  50%  { opacity: 0.2; }
+  100% { opacity: 1; }
+}
+
+@keyframes fadeLinesB {
+  0%   { opacity: 0.2; }
+  50%  { opacity: 1; }
+  100% { opacity: 0.2; }
+}
+/* fine background animato */
+
 .cardSpecial {
-    transition: transform 0.3s ease;
-    
+  transition: 
+    transform 0.3s ease,
+    background-color 0.5s ease-in-out,
+    color 0.5s ease-in-out;
 }
 
-.cardSpecial:hover {
+@media (min-width: 640px) {
+  .cardSpecial:hover {
     transform: scale(1.05);
+  }
 }
-
 .genreBadge {
     background-color: rgb(155, 33, 226, 0.189);
 }
@@ -24,4 +100,21 @@
 
 .btnSpecial:hover {
     background-color: rgb(156, 33, 226);
+}
+
+.listColor {
+  transition: color 0.3s ease;
+}
+.listColor:hover {
+  color: rgb(156, 33, 226);
+}
+
+.custom-purple-shadow {
+  /* primo livello soffuso, leggero */
+  box-shadow:
+    0 0 10px rgba(155,33,226,0.4),
+    /* secondo livello più ampio e sfumato */
+    0 0 20px rgba(155,33,226,0.3),
+    /* terzo livello ancora più diffuso */
+    0 0 30px rgba(155,33,226,0.2);
 }

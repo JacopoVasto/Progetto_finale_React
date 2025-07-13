@@ -64,7 +64,7 @@ export default function GamePage() {
 
   return (
     data && (
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4 py-4 bg-base-200 rounded-lg">
         {/* Titolo con immagine di sfondo */}
         <div
   className="relative h-64 w-full rounded-lg overflow-hidden shadow-lg mb-8"
@@ -80,13 +80,15 @@ export default function GamePage() {
       {data.name}
     </h1>
   </div>
+       <p className="absolute bottom-0 end-0 bg-black bg-opacity-50 text-xs sm:text-sm text-gray-100 px-3 py-1 rounded-tl-lg">
+         Released: {data.released}
+       </p>
 </div>
 
         {/* Info gioco */}
         <div className="flex flex-col md:flex-row gap-8">
           {/* Colonna info */}
           <div className="flex-1 space-y-4">
-            <p className="text-sm text-gray-400">Rilasciato: {data.released}</p>
             <ToggleFavorite data={data} />
             <p className="text-lg">⭐ Rating: {data.rating}</p>
             <div>

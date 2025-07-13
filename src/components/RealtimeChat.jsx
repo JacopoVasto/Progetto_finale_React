@@ -139,43 +139,60 @@ export default function RealtimeChat({ data }) {
     }
   }
 
-  return (
-    <div
-      ref={messageRef}
-      className="mt-1 px-3 w-full h-[50vh] flex flex-col justify-end bg-[#1b212b] overflow-y-auto"
-    >
-      {loadingInitial && <progress className="progress w-full mb-2" />}
-      {error && <div className="text-red-500 mb-2">{error}</div>}
+return (
+  <div
+    ref={messageRef}
+    className="mt-1 px-3 w-full h-[50vh] flex flex-col bg-base-300 overflow-y-auto"
+  >
+    {loadingInitial && <progress className="progress w-full mb-2" />}
+    {error && <div className="text-red-500 mb-2">{error}</div>}
 
-      {grouped.map((grp) => {
-        const isOwn = session?.user?.id === grp.profile_id;
-        const { username, avatar_url } = grp.profiles || {};
-        const key = `${grp.profile_id}-${grp.items[0]?.id}`;
-        return (
-          <div key={key} className={`chat ${isOwn ? "chat-end" : "chat-start"} mb-4`}>
-            <div className="chat-image avatar">
-              <div className="w-10 rounded-full">
-                <img
-                  src={avatar_url}
-                  alt={username}
-                  onError={(e) => { e.currentTarget.onerror = null; e.currentTarget.src = avatar_url; }}
-                />
-              </div>
-            </div>
-            <div className="chat-header">{username}</div>
-            <div className="chat-bubble space-y-2">
-              {grp.items.map((m) => (
-                <div key={m.id} className="flex justify-between items-end">
-                  <span>{m.content}</span>
-                  <time className="text-[10px] opacity-50 ml-2">
-                    {dayjs(m.updated_at).format("HH:mm")}
-                  </time>
-                </div>
-              ))}
+    {grouped.map((grp) => {
+      const isOwn = session?.user?.id === grp.profile_id;
+      const { username, avatar_url } = grp.profiles || {};
+      const key = `${grp.profile_id}-${grp.items[0]?.id}`;
+
+      return (
+        <div key={key} className={`chat ${isOwn ? "chat-end" : "chat-start"} mb-4`}>
+          <div className="chat-image avatar">
+            <div className="w-10 rounded-full">
+              <img
+                src={avatar_url}
+                alt={username}
+                onError={(e) => {
+                  e.currentTarget.onerror = null;
+                  e.currentTarget.src = avatar_url;
+                }}
+              />
             </div>
           </div>
-        );
-      })}
-    </div>
-  );
+
+          <div className="chat-header">{username}</div>
+
+          <div
+            className={`
+              chat-bubble space-y-2
+              ${!isOwn
+                ? "bg-base-content text-base-100"
+                : "bg-[rgb(155,33,226)] text-white"}
+              whitespace-normal
+              break-words [overflow-wrap:anywhere]
+              pr-1
+            `}
+          >
+            {grp.items.map((m) => (
+              <div key={m.id} className="flex justify-between items-end">
+                <span className="block min-w-0">{m.content}</span>
+                <time className="text-[10px] opacity-50 ml-2 flex-shrink-0">
+                  {dayjs(m.updated_at).format("HH:mm")}
+                </time>
+              </div>
+            ))}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+);
+
 }

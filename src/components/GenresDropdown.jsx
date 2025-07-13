@@ -12,19 +12,23 @@ export default function GenresDropdown() {
 
     return (
         <>
-            <details className="dropdown">
-                <summary>Genres</summary>
+
+            <div className="collapse">
+                <input type="checkbox" />
+                <div className="collapse-title font-semibold">Genres</div>
+                <div className="collapse-content text-sm">
                 {error && <small>{error}</small>}
                     <ul>
                         {data && data.results.map((genre) => (
-                            <li key={genre.id}>
+                            <li key={genre.id} className='py-1 listColor'>
                                 <Link to={`/games/${genre.slug}`}>
                                     {genre.name}
                                 </Link>
                             </li>
                         ))}
                     </ul>
-                </details>
+                        </div>
+                </div>
         </>
     );
 }

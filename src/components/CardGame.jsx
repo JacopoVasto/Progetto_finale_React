@@ -14,7 +14,7 @@ export default function CardGame({ game }) {
   ));
 
   return (
-    <div className="card w-full bg-base-100 shadow-sm cardSpecial flex flex-col h-full">
+    <div className="card w-full bg-base-300 shadow-sm cardSpecial flex flex-col h-full">
       <div className="relative">
         {/* Link wrapping only the image */}
         <Link to={`/games/${game.slug}/${game.id}`}>  

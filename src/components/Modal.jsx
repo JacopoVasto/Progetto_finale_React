@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import { forwardRef } from 'react';
 
 const Modal = forwardRef(({ id, title, children, showCloseButton = true }, ref) => (
   <dialog id={id} ref={ref} className="modal" aria-modal="true">

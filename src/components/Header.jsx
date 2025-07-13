@@ -25,7 +25,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-base-100 shadow-sm grid grid-cols-3 items-center px-4 py-2">
+      <header className="bg-base-100 shadow-md z-10 relative grid grid-cols-3 items-center px-4 py-2">
         {/* Left: Theme Toggle */}
         <div className="flex items-center">
           <ThemeToggle />

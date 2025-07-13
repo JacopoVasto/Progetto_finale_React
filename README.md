@@ -1,3 +1,7 @@
+13/07/2025  
+sito finito ed entrato in fase di test.  
+  
+  
 11/07/2025  
 migliorata UIex.  
 Sostituiti alert con modal (da completare la sostituzione),  
