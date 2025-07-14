@@ -182,20 +182,23 @@ export default function AccountPage() {
         {floatingLabel('first_name', 'First name', firstName, setFirstName)}
         {floatingLabel('last_name', 'Last name', lastName, setLastName)}
 
+
+      {/* Button to open favorites modal */}
+      <button
+        type="button"
+        className="btn btnSpecial mt-6 w-full"
+        onClick={openFavoritesModal}
+      >
+        Manage Favorites
+      </button>
+
+      
         {/* Save button */}
         <button type="submit" disabled={loading} className="btn btnSpecial w-full">
           {loading ? 'Saving...' : 'Save Changes'}
         </button>
       </form>
 
-      {/* Button to open favorites modal */}
-      <button
-        type="button"
-        className="btn btn-secondary mt-6 w-full"
-        onClick={openFavoritesModal}
-      >
-        Manage Favorites
-      </button>
 
       {/* Favorites management modal */}
       <Modal

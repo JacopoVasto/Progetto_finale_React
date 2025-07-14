@@ -1,3 +1,14 @@
+FEATURE implementate  
+modalità dark/night 
+Pulsanti like anche sulle schede con error se non loggato con un modal che richiama una call to action  
+gestione dei giochi preferiti tramite modal  
+avatar visibile in chat  
+messaggi diversi se è l'utente a scrivere  
+sostituzione di tutti gli alert con dei modal  
+
+
+
+  
 13/07/2025  
 sito finito ed entrato in fase di test.  
   
